@@ -68,14 +68,14 @@
 			var today = new Date();	
 			var currentDate = new Date (today.getFullYear(), today.getMonth(), today.getDate());
 			var lastThirtyOneDayDate = new Date (today.getFullYear(), today.getMonth()-1, today.getDate());
+			
 
 			// Array des 31 derniers jours
 			var arrayMoyenneLastThirtyOneDay = [];
 			var moyenne = 0;
 
 			for (var object of dataJson) {
-				//console.log(lastThirtyOneDayDate);
-				if (object.x.getMonth() >= lastThirtyOneDayDate.getMonth()) {
+				if (object.x.getMonth() >= lastThirtyOneDayDate.getMonth() || (object.x.getMonth() == 0 && lastThirtyOneDayDate.getMonth() == 11)) {
 					var newObj = new Object();
 					newObj.x = object.x;
 					newObj.y = object.y;
@@ -90,7 +90,6 @@
 			for (var object of arrayMoyenneLastThirtyOneDay) {
 				object.y = moyenne;
 			}
-			//console.log(arrayMoyenneLastThirtyOneDay);
 
 			function chartGlobal () {
 
@@ -206,10 +205,7 @@
 	<body>
 		<div id="wrapper">
 			<div id="header" class="container-fluid mb-0 p-0">
-				<!--<a href="index.html"><img src="image/logo.png" alt="Logo du site" title="Logo du site Zoolemag"></a>-->
-			</div>
-			
-			
+			</div>			
 
 			<div id="navbar" class="container-fluid p-0">
 				<nav class="navbar navbar-expand-lg navbar-dark bg-dark m-0 justify-content-around">
