@@ -61,3 +61,7 @@ a:active{
     /*color: #4B088A;*/
     text-decoration: none;
 }
+
+.hide{
+    display: none;
+}

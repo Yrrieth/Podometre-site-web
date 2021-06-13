@@ -216,69 +216,104 @@ function chartLastThirtyOneDays () {
     chart.render();
 
 }
+var dropdownButton = document.getElementById("dropdownButton");
+dropdownButton.append("Année");
 
 function chartYear () {
+
     for (var year of numberYear) {
-        //var contentYear = "<div id=\"contentYear\"" + year + "style=\"height: 300px; width: 100%; top: 300px\"></div>";
-        var contentYear = document.createElement("div");
-        contentYear.style.height = "300px";
-        contentYear.style.width = "100%";
-        contentYear.style.top = "300px";
-        contentYear.id = "contentYear" + year;
-        chartContainerYear.append(contentYear);
+        (function() {
+            var contentYear = document.createElement("div");
+            contentYear.style.height = "300px";
+            contentYear.style.width = "100%";
+            contentYear.style.top = "300px";
+            contentYear.id = "contentYear" + year;
+            chartContainerYear.append(contentYear);
+            contentYear.classList.add("hide");
 
-        var tmpDate = currentDate;
-        console.log(tmpDate + "hhihihihhi");
-        if (tmpDate.getFullYear() != year) {
-            tmpDate = new Date (year, 11, 31);
-        } else {
-            tmpDate = currentDate;
-        }
-            
-
-        var chart = new CanvasJS.Chart("contentYear" + year, {
-            animationEnabled: true,
-            title: {
-                text: "Nombre de pas par jour selon l'année"
-            },
-            axisX: {
-                title: "Jour",
-                minimum: new Date (year, 0, 1),
-                maximum: tmpDate,
-                valueFormatString: "D/MM/YYYY"
-            },
-            axisY: {
-                title: "Nombre de pas",
-                titleFontColor: "#4F81BC",
-                includeZero: true,
-                suffix: " pas"
-            },
-            toolTip: {
-                shared: true
-            },
-            data: [
-            {
-                indexLabelFontColor: "darkSlateGray",
-                name: "Moyenne",
-                type: "area",
-                color: "rgba(165, 223, 0, 0.7)",
-                xValueFormatString: "D/MM/YYYY",
-                yValueFormatString: "## ### ### pas",
-                dataPoints: arrayMoyenneLastThirtyOneDay
-            },
-            {
-                indexLabelFontColor: "darkSlateGray",
-                name: "Nombre de pas par jour en " + year,
-                type: "area",
-                color: "rgba(223, 0, 0, 0.7)",
-                xValueFormatString: "D/MM/YYYY",
-                yValueFormatString: "## ### ### pas",
-                dataPoints: dataJson
+            var tmpDate = currentDate;
+            if (numberYear.indexOf(year) == numberYear.length - 1) {
+                contentYear.classList.remove("hide");
             }
-            ]
-        });
-        chart.render();
+            if (tmpDate.getFullYear() != year) {
+                tmpDate = new Date (year, 11, 31);
+            } else {
+                tmpDate = currentDate;
+            }
+
+            var dropdownMenu = document.getElementById("dropdownMenu");
+            var dropdownItem = document.createElement("button");
+            dropdownItem.classList.add("dropdown-item");
+            dropdownItem.type = "button";
+            dropdownItem.id = "dropdownItem" + year;
+            
+            dropdownItem.append(year);
+            dropdownMenu.append(dropdownItem);
+
+            var chart = new CanvasJS.Chart("contentYear" + year, {
+                animationEnabled: true,
+                title: {
+                    text: "Nombre de pas par jour selon l'année"
+                },
+                axisX: {
+                    title: "Jour",
+                    minimum: new Date (year, 0, 1),
+                    maximum: tmpDate,
+                    valueFormatString: "D/MM/YYYY"
+                },
+                axisY: {
+                    title: "Nombre de pas",
+                    titleFontColor: "#4F81BC",
+                    includeZero: true,
+                    suffix: " pas"
+                },
+                toolTip: {
+                    shared: true
+                },
+                data: [
+                {
+                    indexLabelFontColor: "darkSlateGray",
+                    name: "Moyenne",
+                    type: "area",
+                    color: "rgba(165, 223, 0, 0.7)",
+                    xValueFormatString: "D/MM/YYYY",
+                    yValueFormatString: "## ### ### pas",
+                    dataPoints: arrayMoyenneLastThirtyOneDay
+                },
+                {
+                    indexLabelFontColor: "darkSlateGray",
+                    name: "Nombre de pas par jour en " + year,
+                    type: "area",
+                    color: "rgba(223, 0, 0, 0.7)",
+                    xValueFormatString: "D/MM/YYYY",
+                    yValueFormatString: "## ### ### pas",
+                    dataPoints: dataJson
+                }
+                ]
+            });
+            chart.render();
+        }());
     }
+
+    var dropdownItems = dropdownMenu.querySelectorAll("button");    
+    var contentYearItems = document.getElementById("chartContainerYear").childNodes;
+    
+    // Menu déroulant
+    (function() { 
+        dropdownItems.forEach (element => {
+            element.onclick = function() {
+                contentYearItems.forEach(element2 => {
+                        var dropdownYear = element.id.slice(element.id.length - 4);
+                        var contentYearTmp = element2.id.slice(element2.id.length - 4);
+                        if (dropdownYear == contentYearTmp) {
+                            element2.classList.remove("hide");
+                        } else {
+                            element2.classList.add("hide");
+                        }
+                });      
+            }
+        });
+    }());
 }
 
 function main() {
